@@ -1,5 +1,8 @@
+# coder/views.py
 import re
+import os
 from django.http import JsonResponse
+from django.conf import settings
 from rest_framework import viewsets, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,7 +18,6 @@ from .serializers import CodeSessionSerializer, CodeInteractionSerializer, CodeS
 from .services import OllamaService
 from .settings import CODE_LANGUAGES
 
-# Existing ViewSets and Views (unchanged)
 class CodeSessionViewSet(viewsets.ModelViewSet):
     serializer_class = CodeSessionSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -29,83 +31,8 @@ class CodeSessionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-class CodeInteractionViewSet(viewsets.ModelViewSet):
-    serializer_class = CodeInteractionSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return CodeInteraction.objects.filter(session__user=self.request.user)
-
-    def create(self, request):
-        session_id = request.data.get('session_id')
-        if not session_id:
-            return Response({"error": "session_id is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        session = get_object_or_404(CodeSession, id=session_id, user=request.user)
-        prompt = request.data.get('prompt')
-        language = request.data.get('language', 'python')
-
-        system_prompt = (
-            f"You are an expert coding assistant powered by DeepSeek. "
-            f"Provide clean, efficient, and well-commented code in {language}. "
-            f"Include explanations for complex logic and ensure code follows best practices. "
-            f"If the prompt is ambiguous, ask clarifying questions or suggest improvements."
-        )
-
-        ollama_service = OllamaService()
-        try:
-            result = ollama_service.generate(
-                prompt=prompt,
-                model="deepseek-coder",
-                system=system_prompt,
-                options={"temperature": 0.7, "max_tokens": 2000}
-            )
-            ai_response = result.get('response', '')
-            code_snippet = self.extract_code_snippet(ai_response, language)
-
-            if black and language == 'python' and code_snippet:
-                try:
-                    code_snippet = black.format_str(code_snippet, mode=black.FileMode())
-                except Exception as e:
-                    print(f"Code formatting failed: {e}")
-
-            interaction = CodeInteraction.objects.create(
-                session=session,
-                prompt=prompt,
-                response=ai_response,
-                code_snippet=code_snippet,
-                language=language
-            )
-
-            serializer = self.get_serializer(interaction)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        except Exception as e:
-            return Response(
-                {"error": f"Failed to communicate with Ollama: {str(e)}"},
-                status=status.HTTP_503_SERVICE_UNAVAILABLE
-            )
-
-    def extract_code_snippet(self, response, language):
-        pattern = r"```(?:{lang})?\s*([\s\S]*?)```".format(lang=re.escape(language))
-        matches = re.findall(pattern, response, re.IGNORECASE)
-        if matches:
-            return matches[0].strip()
-
-        inline_pattern = r"`([^`]+)`"
-        inline_matches = re.findall(inline_pattern, response)
-        if inline_matches:
-            return inline_matches[0].strip()
-
-        code_keywords = ['def ', 'function ', 'class ', 'import ', 'export ', 'const ', 'let ', 'var ']
-        if any(keyword in response.lower() for keyword in code_keywords):
-            lines = response.split('\n')
-            code_lines = [line for line in lines if not line.strip().startswith(('#', '//', '/*', '*', '"""'))]
-            return '\n'.join(code_lines).strip()
-
-        return ""
+        CodeSession.objects.filter(user=self.request.user, is_active=True).update(is_active=False)
+        serializer.save(user=self.request.user, is_active=True)
 
     @action(detail=True, methods=['delete'])
     def delete_session(self, request, pk=None):
@@ -121,6 +48,91 @@ class CodeInteractionViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CodeInteractionViewSet(viewsets.ModelViewSet):
+    serializer_class = CodeInteractionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return CodeInteraction.objects.filter(session__user=self.request.user)
+
+    def create(self, request):
+        session_id = request.data.get('session_id')
+        prompt = request.data.get('prompt')
+        language = request.data.get('language', 'python')
+        think_mode = request.data.get('think_mode', False)
+
+        if not session_id:
+            return Response({"error": "session_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not prompt:
+            return Response({"error": "prompt is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        session = get_object_or_404(CodeSession, id=session_id, user=request.user)
+
+        system_prompt = (
+            "You are Grok, a witty and helpful coding assistant created by xAI. "
+            "Provide clear, concise, and accurate answers with a touch of humor. "
+            f"For coding tasks, generate clean, well-commented {language} code in markdown code blocks. "
+            "Include brief explanations for complex logic and follow best practices. "
+            "If the prompt is unclear, ask clarifying questions or suggest improvements."
+        )
+        if think_mode:
+            system_prompt += (
+                "\nThink step-by-step, explain your reasoning clearly, "
+                "and provide a detailed solution with thorough comments."
+            )
+
+        recent_interactions = CodeInteraction.objects.filter(session=session).order_by('-created_at')[:3]
+        context = "\n".join([f"User: {i.prompt}\nAssistant: {i.response}" for i in recent_interactions])
+
+        ollama_service = OllamaService()
+        try:
+            result = ollama_service.generate(
+                prompt=f"{context}\n\nUser: {prompt}",
+                model=os.getenv("OLLAMA_MODEL", "deepseek-coder"),
+                system=system_prompt,
+                options={"temperature": 0.7 if not think_mode else 0.9, "max_tokens": 2000}
+            )
+            ai_response = result.get('response', '')
+            code_snippets = self.extract_code_snippets(ai_response, language)
+
+            formatted_code = []
+            for snippet in code_snippets:
+                if black and language == 'python' and snippet['code']:
+                    try:
+                        snippet['code'] = black.format_str(snippet['code'], mode=black.FileMode())
+                    except Exception as e:
+                        print(f"Code formatting failed: {e}")
+                formatted_code.append(snippet)
+
+            interaction = CodeInteraction.objects.create(
+                session=session,
+                prompt=prompt,
+                response=ai_response,
+                code_snippet=formatted_code[0]['code'] if formatted_code else '',
+                language=language
+            )
+
+            serializer = self.get_serializer(interaction)
+            return Response({
+                **serializer.data,
+                'code_snippets': formatted_code
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response(
+                {"error": f"Oops, something went wrong with Ollama: {str(e)}. Please try again!"},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+
+    def extract_code_snippets(self, response, language):
+        pattern = r"```(?:{lang})?\s*([\s\S]*?)```".format(lang=re.escape(language))
+        matches = re.findall(pattern, response, re.IGNORECASE)
+        snippets = [{"language": language, "code": match.strip()} for match in matches]
+        inline_pattern = r"`([^`]+)`"
+        inline_matches = re.findall(inline_pattern, response)
+        snippets.extend([{"language": "text", "code": match.strip()} for match in inline_matches])
+        return snippets if snippets else [{"language": language, "code": ""}]
 
 class CodeExecutionView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -165,9 +177,18 @@ class CodeFormattingView(APIView):
         except Exception as e:
             return Response({"error": f"Formatting failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-# New View for Code Assistant Page
 class CodeAssistantView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        return render(request, 'coder/index.html')
+        session = CodeSession.objects.filter(user=request.user, is_active=True).first()
+        if not session:
+            session = CodeSession.objects.create(
+                user=request.user,
+                title="Coding Session",
+                is_active=True
+            )
+        return render(request, 'coder/index.html', {
+            'code_languages': CODE_LANGUAGES,
+            'active_session_id': session.id
+        })

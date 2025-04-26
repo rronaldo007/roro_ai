@@ -176,3 +176,5 @@ LOGOUT_REDIRECT_URL = 'home:home'
 
 # Session settings
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
+
+

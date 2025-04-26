@@ -39,9 +39,8 @@
       }
     }
   </style>
- {% tailwind_css %}
-    {% block extra_css %}{% endblock %}
-    {% csrf_token %}
+  {% tailwind_css %}
+  {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans flex flex-col min-h-screen antialiased">
   <!-- Navigation -->
@@ -71,7 +70,7 @@
               </form>
             </li>
             <li>
-              <a href="{% url 'coder:index' %}"
+              <a href="{% url 'coder:code_assistant' %}"
                  class="text-sm px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 neumorphic transition duration-200">
                 Code Assistant
               </a>

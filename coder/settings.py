@@ -1,26 +1,23 @@
-from django.conf import settings
+import os
+from dotenv import load_dotenv
 
-# Ollama settings
-OLLAMA_BASE_URL = getattr(settings, 'OLLAMA_BASE_URL', 'http://localhost:11434')
-OLLAMA_DEFAULT_MODEL = getattr(settings, 'OLLAMA_DEFAULT_MODEL', 'deepseek-coder')
-OLLAMA_TIMEOUT = getattr(settings, 'OLLAMA_TIMEOUT', 120)  # seconds
+load_dotenv()
 
-# Code editor settings
-CODE_LANGUAGES = getattr(settings, 'CODE_LANGUAGES', [
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "deepseek-coder")
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+CONTEXT_WINDOW = int(os.getenv("CONTEXT_WINDOW", 3))
+
+# List of supported programming languages for the code assistant
+CODE_LANGUAGES = [
     ('python', 'Python'),
     ('javascript', 'JavaScript'),
-    ('typescript', 'TypeScript'),
-    ('html', 'HTML'),
+    ('htmlmixed', 'HTML'),
     ('css', 'CSS'),
-    ('java', 'Java'),
-    ('cpp', 'C++'),
-    ('csharp', 'C#'),
+    ('clike', 'C/C++/Java'),
+    ('sql', 'SQL'),
+    ('shell', 'Shell'),
     ('go', 'Go'),
     ('rust', 'Rust'),
     ('php', 'PHP'),
     ('ruby', 'Ruby'),
-    ('swift', 'Swift'),
-    ('kotlin', 'Kotlin'),
-    ('sql', 'SQL'),
-    ('bash', 'Bash'),
-])
+]

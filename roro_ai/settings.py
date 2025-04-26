@@ -28,8 +28,6 @@ SECRET_KEY = 'django-insecure-nb9357yt-qk4_i+em3qv1gier#2c^f_fnx2ql$=)9-wwa_nflu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -179,3 +177,14 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '162.243.42.209', '162.243.42.209:8000', '*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://162.243.42.209:8000',  # Production IP and port
+    'http://localhost:8000',       # For local development
+    'http://127.0.0.1:8000',      # For local development
+]
+
+# Security settings for production
+SECURE_SSL_REDIRECT = False  # Set to True if using HTTPS
+SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS
+CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS

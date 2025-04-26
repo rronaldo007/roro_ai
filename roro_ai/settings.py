@@ -178,3 +178,4 @@ LOGOUT_REDIRECT_URL = 'home:home'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
 
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '162.243.42.209', '162.243.42.209:8000', '*']

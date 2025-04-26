@@ -1,82 +1,147 @@
 {% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Roro-AI{% endblock %}</title>
-    {% tailwind_css %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Roro-AI{% endblock %}</title>
+  <!-- Tailwind CSS from theme app -->
+  <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS for Neumorphic Effects and Animations -->
+  <style>
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+    /* Neumorphic button effect */
+    .neumorphic {
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+    }
+    .neumorphic:hover {
+      box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+      transform: translateY(1px);
+    }
+    /* Flash message animation */
+    .flash-message {
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+ {% tailwind_css %}
     {% block extra_css %}{% endblock %}
     {% csrf_token %}
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-    <!-- Navigation -->
-    <header class="bg-indigo-600 text-white shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="{% url 'home:home' %}" class="text-2xl font-bold flex items-center">
-                <span class="mr-2">🤖</span> Roro-AI
+<body class="bg-gray-900 text-gray-100 font-sans flex flex-col min-h-screen antialiased">
+  <!-- Navigation -->
+  <header class="bg-gray-800 text-gray-100 shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="{% url 'home:home' %}" class="text-2xl font-bold flex items-center space-x-2">
+        <span class="text-indigo-500">🤖</span>
+        <span>Roro-AI</span>
+      </a>
+      <nav class="flex items-center space-x-6">
+        <ul class="flex items-center space-x-4">
+          <li>
+            <a href="{% url 'home:home' %}"
+               class="text-sm font-medium hover:text-indigo-400 transition duration-200 {% if request.resolver_match.url_name == 'home' %}text-indigo-400 font-semibold{% endif %}">
+              Home
             </a>
-            <nav>
-                <ul class="flex space-x-4">
-                    <li><a href="{% url 'home:home' %}" class="hover:text-indigo-200 transition {% if active_tab == 'home' %}font-semibold{% endif %}">Home</a></li>
-                    
-                    {% if user.is_authenticated %}
-                        <span class="px-4 py-2">Hello, {{ user.username }}</span>
-                        <form method="post" action="{% url 'authentication:logout' %}" class="inline">
-                            {% csrf_token %}
-                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Logout</button>
-                            <a href="{% url 'coder:index' %}" class="nav-link">Code Assistant</a>
-                        </form>
-                    {% else %}
-                        <a href="{% url 'authentication:login' %}" class="px-4 py-2 hover:text-blue-600">Login</a>
-                        <a href="{% url 'authentication:register' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Register</a>
-                    {% endif %}
-                </ul>
-            </nav>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="text-sm text-gray-400">Hello, {{ user.username }}</li>
+            <li>
+              <form method="post" action="{% url 'authentication:logout' %}" class="inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="text-sm px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 neumorphic transition duration-200">
+                  Logout
+                </button>
+              </form>
+            </li>
+            <li>
+              <a href="{% url 'coder:index' %}"
+                 class="text-sm px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 neumorphic transition duration-200">
+                Code Assistant
+              </a>
+            </li>
+          {% else %}
+            <li>
+              <a href="{% url 'authentication:login' %}"
+                 class="text-sm px-4 py-2 hover:text-indigo-400 transition duration-200">
+                Login
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'authentication:register' %}"
+                 class="text-sm px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 neumorphic transition duration-200">
+                Register
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Flash Messages -->
+  {% if messages %}
+    <div class="container mx-auto px-4 mt-6">
+      {% for message in messages %}
+        <div class="p-4 mb-4 rounded-lg flash-message
+                    {% if message.tags == 'error' %}bg-red-800 text-red-200
+                    {% elif message.tags == 'success' %}bg-green-800 text-green-200
+                    {% elif message.tags == 'warning' %}bg-yellow-800 text-yellow-200
+                    {% else %}bg-blue-800 text-blue-200{% endif %}">
+          {{ message }}
         </div>
-    </header>
-    
-    <!-- Messages -->
-    {% if messages %}
-        <div class="container mx-auto px-4 mt-4">
-            {% for message in messages %}
-                <div class="p-4 rounded-md {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-700{% elif message.tags == 'info' %}bg-blue-100 text-blue-700{% else %}bg-gray-100 text-gray-700{% endif %} mb-4">
-                    {{ message }}
-                </div>
-            {% endfor %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8 flex-grow">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-gray-400 py-8 mt-auto">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0 text-center md:text-left">
+          <h3 class="text-xl font-bold flex items-center justify-center md:justify-start">
+            <span class="mr-2 text-indigo-500">🤖</span> Roro-AI
+          </h3>
+          <p class="mt-2 text-sm">Your local AI-powered coding assistant</p>
         </div>
-    {% endif %}
-    
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6 flex-grow">
-        {% block content %}{% endblock %}
-    </main>
-    
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6 mt-auto">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <h3 class="text-xl font-bold flex items-center">
-                        <span class="mr-2">🤖</span> Roro-AI
-                    </h3>
-                    <p class="text-gray-400 mt-1">Your local AI assistant</p>
-                </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white transition">
-                        <span class="sr-only">GitHub</span>
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            <div class="mt-4 border-t border-gray-700 pt-4 text-center text-gray-400 text-sm">
-                <p>&copy; {% now "Y" %} Roro-AI. All rights reserved.</p>
-            </div>
+        <div class="flex space-x-6">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-gray-200 transition duration-200">
+            <span class="sr-only">GitHub</span>
+            <i class="fab fa-github text-xl"></i>
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="hover:text-gray-200 transition duration-200">
+            <span class="sr-only">Twitter</span>
+            <i class="fab fa-twitter text-xl"></i>
+          </a>
         </div>
-    </footer>
-    
-    {% block extra_js %}{% endblock %}
+      </div>
+      <div class="mt-6 border-t border-gray-700 pt-4 text-center text-sm">
+        © {% now "Y" %} Roro-AI. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

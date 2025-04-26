@@ -1,210 +1,213 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Roro-AI - Your Local AI Assistant{% endblock %}
+{% block title %}Roro-AI – Your Local AI Assistant{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-lg shadow-xl mb-12">
-    <div class="container mx-auto px-6 py-16 md:py-24">
-        <div class="flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 mb-8 md:mb-0">
-                <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">
-                    Experience the Power of Local AI with Roro-AI
-                </h1>
-                <p class="text-xl mb-8">
-                    Run Ollama and DeepSeek-Coder locally to build, create, and code with AI without sending your data to the cloud.
-                </p>
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="#get-started" class="bg-white text-indigo-600 hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg transition duration-300 text-center">
-                        Get Started
-                    </a>
-                    <a href="#features" class="bg-indigo-500 hover:bg-indigo-400 font-semibold py-3 px-6 rounded-lg transition duration-300 text-center">
-                        Learn More
-                    </a>
-                </div>
+<section class="relative overflow-hidden rounded-lg shadow-xl bg-gradient-to-br from-indigo-800 to-purple-900 text-gray-100 mb-12">
+  <div class="container mx-auto px-6 py-16 md:py-24">
+    <div class="flex flex-col-reverse md:flex-row items-center">
+      <div class="md:w-1/2 mt-8 md:mt-0">
+        <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">
+          Experience the Power of Local AI with Roro-AI
+        </h1>
+        <p class="text-lg mb-8 text-gray-300">
+          Run Ollama and DeepSeek-Coder locally to build, create, and code without ever leaving your machine.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#get-started"
+             class="block text-center bg-white text-indigo-900 font-semibold py-3 px-6 rounded-lg transition hover:bg-gray-100">
+            Get Started
+          </a>
+          <a href="#features"
+             class="block text-center bg-indigo-600 hover:bg-indigo-500 font-semibold py-3 px-6 rounded-lg transition">
+            Learn More
+          </a>
+        </div>
+      </div>
+      <div class="md:w-1/2 flex justify-center">
+        <!-- Example chat bubble mockup -->
+        <div class="relative w-full max-w-lg">
+          <!-- Blobs -->
+          <div class="absolute top-0 -left-8 w-64 h-64 bg-purple-700 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-blob"></div>
+          <div class="absolute top-0 -right-8 w-64 h-64 bg-indigo-700 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-blob animation-delay-2000"></div>
+          <div class="absolute -bottom-8 left-16 w-64 h-64 bg-pink-700 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-blob animation-delay-4000"></div>
+          <!-- Mock Chat UI -->
+          <div class="relative bg-gray-800 p-8 rounded-2xl shadow-xl">
+            <div class="flex items-center justify-center mb-4">
+              <span class="text-6xl">🤖</span>
             </div>
-            <div class="md:w-1/2 flex justify-center">
-                <div class="relative w-full max-w-lg">
-                    <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-                    <div class="absolute top-0 -right-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-                    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-                    <div class="relative">
-                        <div class="bg-white p-8 rounded-2xl shadow-xl">
-                            <div class="flex items-center justify-center mb-4">
-                                <div class="text-6xl">🤖</div>
-                            </div>
-                            <div class="bg-gray-100 p-4 rounded-lg mb-4">
-                                <div class="flex items-center space-x-2 mb-2">
-                                    <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
-                                    <div class="text-sm text-gray-600">User</div>
-                                </div>
-                                <p class="text-gray-800">How do I implement a binary search tree in Python?</p>
-                            </div>
-                            <div class="bg-indigo-100 p-4 rounded-lg">
-                                <div class="flex items-center space-x-2 mb-2">
-                                    <div class="w-3 h-3 bg-indigo-600 rounded-full"></div>
-                                    <div class="text-sm text-indigo-600">Roro-AI</div>
-                                </div>
-                                <p class="text-gray-800">Here's how to implement a binary search tree in Python:</p>
-                                <pre class="bg-gray-800 text-green-400 p-3 rounded mt-2 text-sm overflow-x-auto">
+            <div class="space-y-4">
+              <div class="bg-gray-700 p-4 rounded-lg">
+                <div class="flex items-center space-x-2 mb-2">
+                  <span class="w-3 h-3 bg-gray-500 rounded-full"></span>
+                  <span class="text-sm text-gray-400">User</span>
+                </div>
+                <p class="text-gray-200">How do I implement a binary search tree in Python?</p>
+              </div>
+              <div class="bg-indigo-900 p-4 rounded-lg">
+                <div class="flex items-center space-x-2 mb-2">
+                  <span class="w-3 h-3 bg-indigo-400 rounded-full"></span>
+                  <span class="text-sm text-indigo-300">Roro-AI</span>
+                </div>
+                <p class="text-gray-200">Here's how to implement a binary search tree in Python:</p>
+                <pre class="mt-2 bg-gray-900 text-green-400 p-3 rounded overflow-x-auto text-sm font-mono">
 class Node:
     def __init__(self, value):
         self.value = value
-        self.left = None
+        self.left  = None
         self.right = None
 
 class BinarySearchTree:
     def __init__(self):
         self.root = None
-        
+
     def insert(self, value):
-        # Implementation here...</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        # Implementation here...
+                </pre>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Features Section -->
 <section id="features" class="mb-16">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">Why Choose Roro-AI?</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Feature 1 -->
-            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                <div class="text-indigo-600 text-4xl mb-4">🔒</div>
-                <h3 class="text-xl font-semibold mb-2">Privacy First</h3>
-                <p class="text-gray-600">Run AI models locally on your machine. Your code and data never leave your computer.</p>
-            </div>
-            
-            <!-- Feature 2 -->
-            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                <div class="text-indigo-600 text-4xl mb-4">💻</div>
-                <h3 class="text-xl font-semibold mb-2">Code Generation</h3>
-                <p class="text-gray-600">Leverage DeepSeek-Coder for advanced code completion, generation, and explanation.</p>
-            </div>
-            
-            <!-- Feature 3 -->
-            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                <div class="text-indigo-600 text-4xl mb-4">⚡</div>
-                <h3 class="text-xl font-semibold mb-2">Fast & Efficient</h3>
-                <p class="text-gray-600">Optimized for performance with Ollama, even on consumer-grade hardware.</p>
-            </div>
-        </div>
+  <div class="container mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-100">Why Choose Roro-AI?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Privacy First -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <div class="text-purple-400 text-4xl mb-4">🔒</div>
+        <h3 class="text-xl font-semibold mb-2 text-gray-100">Privacy First</h3>
+        <p class="text-gray-400">Run AI models locally. Your data never leaves your machine.</p>
+      </div>
+      <!-- Code Generation -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <div class="text-purple-400 text-4xl mb-4">💻</div>
+        <h3 class="text-xl font-semibold mb-2 text-gray-100">Code Generation</h3>
+        <p class="text-gray-400">Leverage DeepSeek-Coder for advanced code completion and refactoring.</p>
+      </div>
+      <!-- Fast & Efficient -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <div class="text-purple-400 text-4xl mb-4">⚡</div>
+        <h3 class="text-xl font-semibold mb-2 text-gray-100">Fast & Efficient</h3>
+        <p class="text-gray-400">Optimized performance with Ollama, even on consumer-grade GPUs.</p>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Getting Started Section -->
-<section id="get-started" class="mb-16 bg-gray-100 py-12 rounded-lg">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">Get Started in Minutes</h2>
-        
-        <div class="max-w-3xl mx-auto">
-            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h3 class="text-xl font-semibold mb-4 flex items-center">
-                    <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">1</span>
-                    Install Ollama
-                </h3>
-                <p class="text-gray-600 mb-4">Download and install Ollama on your system.</p>
-                <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto">
-# On macOS or Linux
+<section id="get-started" class="mb-16">
+  <div class="container mx-auto px-6 bg-gray-900 rounded-lg py-12">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-100">Get Started in Minutes</h2>
+    <div class="max-w-3xl mx-auto space-y-8">
+      <!-- Step 1 -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 flex items-center text-gray-100">
+          <span class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">1</span>
+          Install Ollama
+        </h3>
+        <p class="text-gray-400 mb-4">Download and install Ollama on your system.</p>
+        <pre class="bg-gray-900 text-green-400 p-4 rounded overflow-x-auto font-mono text-sm">
+# macOS / Linux
 curl -fsSL https://ollama.com/install.sh | sh
-
-# Or download from https://ollama.com</pre>
-            </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h3 class="text-xl font-semibold mb-4 flex items-center">
-                    <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">2</span>
-                    Pull DeepSeek-Coder
-                </h3>
-                <p class="text-gray-600 mb-4">Download the DeepSeek-Coder model.</p>
-                <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto">ollama pull deepseek-coder</pre>
-            </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold mb-4 flex items-center">
-                    <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">3</span>
-                    Start Using Roro-AI
-                </h3>
-                <p class="text-gray-600 mb-4">Create an account and start using Roro-AI to interact with your local models.</p>
-                <div class="text-center">
-                    <a href="#" class="inline-block bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
-                        Register Now
-                    </a>
-                </div>
-            </div>
+        </pre>
+      </div>
+      <!-- Step 2 -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 flex items-center text-gray-100">
+          <span class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">2</span>
+          Pull DeepSeek-Coder
+        </h3>
+        <p class="text-gray-400 mb-4">Download the DeepSeek-Coder model.</p>
+        <pre class="bg-gray-900 text-green-400 p-4 rounded overflow-x-auto font-mono text-sm">
+ollama pull deepseek-coder
+        </pre>
+      </div>
+      <!-- Step 3 -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 flex items-center text-gray-100">
+          <span class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">3</span>
+          Start Using Roro-AI
+        </h3>
+        <p class="text-gray-400 mb-4">Create an account and start coding with your local AI.</p>
+        <div class="text-center">
+          <a href="{% url 'authentication:register' %}"
+             class="inline-block bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 px-8 rounded-lg transition">
+            Register Now
+          </a>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Use Cases Section -->
 <section class="mb-16">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">What You Can Do with Roro-AI</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Use Case 1 -->
-            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold mb-4 text-indigo-600">Code Completion</h3>
-                <p class="text-gray-600 mb-4">Get intelligent code suggestions as you type, helping you code faster and with fewer errors.</p>
-                <div class="bg-gray-100 p-4 rounded-lg">
-                    <p class="text-sm text-gray-500 mb-2">Example:</p>
-                    <p class="text-gray-800 font-mono">Write a function that sorts a list using quicksort</p>
-                </div>
-            </div>
-            
-            <!-- Use Case 2 -->
-            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold mb-4 text-indigo-600">Code Explanation</h3>
-                <p class="text-gray-600 mb-4">Get detailed explanations of complex code to understand how it works.</p>
-                <div class="bg-gray-100 p-4 rounded-lg">
-                    <p class="text-sm text-gray-500 mb-2">Example:</p>
-                    <p class="text-gray-800 font-mono">Explain how async/await works in Python</p>
-                </div>
-            </div>
-            
-            <!-- Use Case 3 -->
-            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold mb-4 text-indigo-600">Debugging Help</h3>
-                <p class="text-gray-600 mb-4">Get assistance debugging your code when you encounter errors or unexpected behavior.</p>
-                <div class="bg-gray-100 p-4 rounded-lg">
-                    <p class="text-sm text-gray-500 mb-2">Example:</p>
-                    <p class="text-gray-800 font-mono">Why am I getting a KeyError in this Python dictionary?</p>
-                </div>
-            </div>
-            
-            <!-- Use Case 4 -->
-            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold mb-4 text-indigo-600">Project Planning</h3>
-                <p class="text-gray-600 mb-4">Get help designing architecture, planning features, and organizing your development workflow.</p>
-                <div class="bg-gray-100 p-4 rounded-lg">
-                    <p class="text-sm text-gray-500 mb-2">Example:</p>
-                    <p class="text-gray-800 font-mono">Help me plan the structure for a Django web app</p>
-                </div>
-            </div>
+  <div class="container mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-100">What You Can Do</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Code Completion -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-4 text-purple-400">Code Completion</h3>
+        <p class="text-gray-400 mb-4">Get smart suggestions as you type for fewer errors.</p>
+        <div class="bg-gray-900 p-4 rounded-lg">
+          <p class="text-sm text-gray-500 mb-2">Example:</p>
+          <p class="text-gray-200 font-mono">Write a function that sorts a list using quicksort</p>
         </div>
+      </div>
+      <!-- Explanation -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-4 text-purple-400">Code Explanation</h3>
+        <p class="text-gray-400 mb-4">Understand complex code with clear, step-by-step explanations.</p>
+        <div class="bg-gray-900 p-4 rounded-lg">
+          <p class="text-sm text-gray-500 mb-2">Example:</p>
+          <p class="text-gray-200 font-mono">Explain how async/await works in Python</p>
+        </div>
+      </div>
+      <!-- Debugging -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-4 text-purple-400">Debugging Help</h3>
+        <p class="text-gray-400 mb-4">Fix errors faster with AI-driven debugging suggestions.</p>
+        <div class="bg-gray-900 p-4 rounded-lg">
+          <p class="text-sm text-gray-500 mb-2">Example:</p>
+          <p class="text-gray-200 font-mono">Why am I getting a KeyError in this Python dictionary?</p>
+        </div>
+      </div>
+      <!-- Planning -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-4 text-purple-400">Project Planning</h3>
+        <p class="text-gray-400 mb-4">Design architecture and workflows with AI guidance.</p>
+        <div class="bg-gray-900 p-4 rounded-lg">
+          <p class="text-sm text-gray-500 mb-2">Example:</p>
+          <p class="text-gray-200 font-mono">Help me plan the structure for a Django web app</p>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- CTA Section -->
-<section class="bg-indigo-600 text-white py-16 rounded-lg">
-    <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl font-bold mb-4">Ready to Boost Your Productivity?</h2>
-        <p class="text-xl mb-8 max-w-2xl mx-auto">Join Roro-AI today and experience the power of local AI for coding and development.</p>
-        <div class="flex justify-center space-x-4">
-            <a href="#" class="bg-white text-indigo-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition duration-300">
-                Get Started
-            </a>
-            <a href="#" class="border border-white hover:bg-indigo-500 font-semibold py-3 px-8 rounded-lg transition duration-300">
-                Learn More
-            </a>
-        </div>
+<section class="bg-purple-900 text-gray-100 py-16 rounded-lg">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Ready to Elevate Your Coding?</h2>
+    <p class="text-xl mb-8">Join Roro-AI and unlock the full potential of local AI.</p>
+    <div class="flex justify-center gap-4">
+      <a href="{% url 'authentication:register' %}"
+         class="bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 px-8 rounded-lg transition">
+        Get Started
+      </a>
+      <a href="#features"
+         class="border border-purple-400 hover:bg-purple-800 text-purple-200 font-semibold py-3 px-8 rounded-lg transition">
+        Learn More
+      </a>
     </div>
+  </div>
 </section>
 {% endblock %}

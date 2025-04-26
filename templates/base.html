@@ -7,6 +7,7 @@
     <title>{% block title %}Roro-AI{% endblock %}</title>
     {% tailwind_css %}
     {% block extra_css %}{% endblock %}
+    {% csrf_token %}
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
     <!-- Navigation -->
@@ -20,15 +21,16 @@
                     <li><a href="{% url 'home:home' %}" class="hover:text-indigo-200 transition {% if active_tab == 'home' %}font-semibold{% endif %}">Home</a></li>
                     
                     {% if user.is_authenticated %}
-    <span class="px-4 py-2">Hello, {{ user.username }}</span>
-    <form method="post" action="{% url 'authentication:logout' %}" class="inline">
-        {% csrf_token %}
-        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Logout</button>
-    </form>
-{% else %}
-    <a href="{% url 'authentication:login' %}" class="px-4 py-2 hover:text-blue-600">Login</a>
-    <a href="{% url 'authentication:register' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Register</a>
-{% endif %}
+                        <span class="px-4 py-2">Hello, {{ user.username }}</span>
+                        <form method="post" action="{% url 'authentication:logout' %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Logout</button>
+                            <a href="{% url 'coder:index' %}" class="nav-link">Code Assistant</a>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'authentication:login' %}" class="px-4 py-2 hover:text-blue-600">Login</a>
+                        <a href="{% url 'authentication:register' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Register</a>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
